@@ -1,0 +1,65 @@
+---
+- name: Harden Ubuntu 24.04
+  hosts: lab
+  become: true
+  force_handlers: true
+  vars:
+    ssh_max_auth_tries: 4
+
+
+  tasks:
+    - name: Ensure CIS SSH hardening drop-in is in place
+      ansible.builtin.template:
+        src: templates/00-cis-hardening.conf.j2
+        dest: /etc/ssh/sshd_config.d/00-cis-hardening.conf
+        owner: root
+        group: root
+        mode: "0600"
+        validate: /usr/sbin/sshd -t -f %s
+      notify: Reload sshd
+
+    - name: Ensure SSH server configuration is owned by root only
+      ansible.builtin.file:
+        path: /etc/ssh/sshd_config
+        owner: root
+        group: root
+        mode: "0600"
+        state: file
+
+    - name: Find SSH private host keys
+      ansible.builtin.find:
+        paths: /etc/ssh
+        patterns: "ssh_host_*_key"
+        file_type: file
+      register: ssh_private_keys
+
+    - name: Ensure SSH private host keys are root-only
+      ansible.builtin.file:
+        path: "{{ item.path }}"
+        owner: root
+        group: root
+        mode: "0600"
+      loop: "{{ ssh_private_keys.files }}"
+
+    - name: Find SSH public host keys
+      ansible.builtin.find:
+        paths: /etc/ssh
+        patterns: "ssh_host_*_key.pub"
+        file_type: file
+      register: ssh_public_keys
+
+   
+    - name: Ensure SSH public host keys are root-owned and protected
+      ansible.builtin.file:
+        path: "{{ item.path }}"
+        owner: root
+        group: root
+        mode: "0644"
+      loop: "{{ ssh_public_keys.files }}"
+  
+  
+  handlers:
+    - name: Reload sshd
+      ansible.builtin.service:
+        name: ssh
+        state: reloaded
