@@ -3,9 +3,21 @@
   hosts: lab
   become: true
   force_handlers: true
-  vars:
-    ssh_max_auth_tries: 4
 
+  vars: 
+    cis_ubuntu2404_ssh_max_auth_tries: 4  # CIS 5.1.16: Maximum number of authentication attempts per connection.
+
+    cis_ubuntu2404_rule_5_1_9: true   # GSSAPIAuthentication: Disable GSSAPI authentication.
+    cis_ubuntu2404_rule_5_1_10: true  # HostbasedAuthentication: Disable host-based authentication.
+    cis_ubuntu2404_rule_5_1_11: true  # IgnoreRhosts: Ignore user-level .rhosts and .shosts files.
+    cis_ubuntu2404_rule_5_1_13: true  # LoginGraceTime: Allow 60 seconds to complete SSH authentication.
+    cis_ubuntu2404_rule_5_1_16: true  # MaxAuthTries: Limit authentication attempts to the value above.
+    cis_ubuntu2404_rule_5_1_17: true  # MaxSessions: Limit the number of sessions per network connection to 10.
+    cis_ubuntu2404_rule_5_1_18: true  # MaxStartups: Limit concurrent unauthenticated connections.
+    cis_ubuntu2404_rule_5_1_19: true  # PermitEmptyPasswords: Prevent SSH login with empty passwords.
+    cis_ubuntu2404_rule_5_1_20: true  # PermitRootLogin: Prevent direct SSH login as root.
+    cis_ubuntu2404_rule_5_1_21: true  # PermitUserEnvironment: Prevent SSH from accepting user-controlled environment settings.
+    cis_ubuntu2404_rule_5_1_22: true  # UsePAM: Enable Pluggable Authentication Modules for SSH.
 
   tasks:
     - name: Ensure CIS SSH hardening drop-in is in place

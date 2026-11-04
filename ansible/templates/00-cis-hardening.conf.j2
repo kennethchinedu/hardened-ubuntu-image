@@ -1,32 +1,54 @@
+{% if cis_ubuntu2404_rule_5_1_9 | bool %}
 # CIS 5.1.9
 GSSAPIAuthentication no
+{% endif %}
 
+{% if cis_ubuntu2404_rule_5_1_10 | bool %}
 # CIS 5.1.10
 HostbasedAuthentication no
+{% endif %}
 
+{% if cis_ubuntu2404_rule_5_1_11 | bool %}
 # CIS 5.1.11
 IgnoreRhosts yes
+{% endif %}
 
+{% if cis_ubuntu2404_rule_5_1_13 | bool %}
 # CIS 5.1.13
 LoginGraceTime 60
+{% endif %}
 
+{% if cis_ubuntu2404_rule_5_1_16 | bool %}
 # CIS 5.1.16
-MaxAuthTries {{ ssh_max_auth_tries }}
+MaxAuthTries {{ cis_ubuntu2404_ssh_max_auth_tries }}
+{% endif %}
 
+{% if cis_ubuntu2404_rule_5_1_17 | bool %}
 # CIS 5.1.17
 MaxSessions 10
+{% endif %}
 
+{% if cis_ubuntu2404_rule_5_1_18 | bool %}
 # CIS 5.1.18
 MaxStartups 10:30:60
+{% endif %}
 
+{% if cis_ubuntu2404_rule_5_1_19 | bool %}
 # CIS 5.1.19
 PermitEmptyPasswords no
+{% endif %}
 
+{% if cis_ubuntu2404_rule_5_1_20 | bool %}
 # CIS 5.1.20
 PermitRootLogin no
+{% endif %}
 
+{% if cis_ubuntu2404_rule_5_1_21 | bool %}
 # CIS 5.1.21
 PermitUserEnvironment no
+{% endif %}
 
+{% if cis_ubuntu2404_rule_5_1_22 | bool %}
 # CIS 5.1.22
 UsePAM yes
+{% endif %}
