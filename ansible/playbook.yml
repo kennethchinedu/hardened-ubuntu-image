@@ -1,6 +1,6 @@
 ---
 - name: Harden Ubuntu 24.04
-  hosts: lab
+  hosts: all
   become: true
   force_handlers: true
 
