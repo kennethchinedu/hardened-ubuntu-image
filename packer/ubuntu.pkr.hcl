@@ -22,8 +22,10 @@ locals {
 }
 
 source "amazon-ebs" "ubuntu" {
-  region        = var.region
-  instance_type = "t3.micro"
+  region                                    = var.region
+  instance_type                             = "t3.micro"
+  temporary_security_group_source_public_ip = true
+  encrypt_boot                              = true
 
   ami_name     = "cis-ubuntu2404-${local.timestamp}"
   ssh_username = "ubuntu"
