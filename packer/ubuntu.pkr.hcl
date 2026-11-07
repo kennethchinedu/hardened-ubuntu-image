@@ -17,6 +17,11 @@ variable "region" {
   default = "eu-west-2"
 }
 
+variable "git_sha" {
+  type    = string
+  default = "unknown"
+}
+
 locals {
   timestamp = regex_replace(timestamp(), "[- TZ:]", "")
 }
@@ -44,6 +49,7 @@ source "amazon-ebs" "ubuntu" {
   tags = {
     Name    = "cis-ubuntu2404-${local.timestamp}"
     BuiltBy = "packer"
+    GitSha  = var.git_sha
   }
 }
 
@@ -53,4 +59,11 @@ build {
   provisioner "ansible" {
     playbook_file = "../ansible/playbook.yml"
   }
+
+  post-processor "manifest" {
+    output      = "manifest.json"
+    strip_path  = true
+    custom_data = { git_sha = var.git_sha }
+  }
+
 }
