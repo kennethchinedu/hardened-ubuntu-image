@@ -26,6 +26,21 @@ locals {
   timestamp = regex_replace(timestamp(), "[- TZ:]", "")
 }
 
+hcp_packer_registry {
+  bucket_name = "cis-ubuntu2404"
+  description = "CIS Level 1 hardened Ubuntu 24.04 Server image"
+
+  bucket_labels = {
+    os         = "ubuntu"
+    os_version = "24.04"
+    benchmark  = "cis-l1-server"
+  }
+
+  build_labels = {
+    git_sha = var.git_sha
+  }
+}
+
 source "amazon-ebs" "ubuntu" {
   region                                    = var.region
   instance_type                             = "t3.micro"
@@ -51,30 +66,29 @@ source "amazon-ebs" "ubuntu" {
     BuiltBy = "packer"
     GitSha  = var.git_sha
   }
+
+  run_tags = {
+    BuiltBy = "packer"
+    GitSha  = var.git_sha
+  }
+
+  run_volume_tags = {
+    BuiltBy = "packer"
+    GitSha  = var.git_sha
+  }
+
+  snapshot_tags = {
+    BuiltBy = "packer"
+    GitSha  = var.git_sha
+  }
 }
 
 build {
 
-
-  hcp_packer_registry {
-    bucket_name = "cis-ubuntu2404"
-    description = "CIS Level 1 hardened Ubuntu 24.04 Server image"
-
-    bucket_labels = {
-      os         = "ubuntu"
-      os_version = "24.04"
-      benchmark  = "cis-l1-server"
-    }
-
-    build_labels = {
-      git_sha = var.git_sha
-    }
-  }
   sources = ["source.amazon-ebs.ubuntu"]
 
   provisioner "ansible" {
     playbook_file = "${path.root}/../ansible/playbook.yml"
-
   }
 
   post-processor "manifest" {
@@ -82,5 +96,4 @@ build {
     strip_path  = true
     custom_data = { git_sha = var.git_sha }
   }
-
 }
