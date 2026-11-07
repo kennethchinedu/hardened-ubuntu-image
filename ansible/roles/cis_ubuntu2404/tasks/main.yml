@@ -31,6 +31,8 @@
     group: root
     mode: "0600"
   loop: "{{ ssh_private_keys.files }}"
+  loop_control:
+    label: "{{ item.path }}"
 
 - name: Find SSH public host keys
   ansible.builtin.find:
@@ -46,3 +48,5 @@
     group: root
     mode: "0644"
   loop: "{{ ssh_public_keys.files }}"
+  loop_control:
+    label: "{{ item.path }}"

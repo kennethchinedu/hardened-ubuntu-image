@@ -88,7 +88,8 @@ build {
   sources = ["source.amazon-ebs.ubuntu"]
 
   provisioner "ansible" {
-    playbook_file = "${path.root}/../ansible/playbook.yml"
+    playbook_file   = "${path.root}/../ansible/playbook.yml"
+    extra_arguments = ["-e", "ansible_python_interpreter=/usr/bin/python3"]
   }
 
   post-processor "manifest" {
