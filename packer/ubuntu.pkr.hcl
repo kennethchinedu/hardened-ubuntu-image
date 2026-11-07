@@ -62,7 +62,7 @@ build {
   }
 
   post-processor "manifest" {
-    output      = "manifest.json"
+    output      = "${path.root}/manifest.json"
     strip_path  = true
     custom_data = { git_sha = var.git_sha }
   }
