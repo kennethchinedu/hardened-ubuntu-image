@@ -54,6 +54,22 @@ source "amazon-ebs" "ubuntu" {
 }
 
 build {
+
+
+  hcp_packer_registry {
+    bucket_name = "cis-ubuntu2404"
+    description = "CIS Level 1 hardened Ubuntu 24.04 Server image"
+
+    bucket_labels = {
+      os         = "ubuntu"
+      os_version = "24.04"
+      benchmark  = "cis-l1-server"
+    }
+
+    build_labels = {
+      git_sha = var.git_sha
+    }
+  }
   sources = ["source.amazon-ebs.ubuntu"]
 
   provisioner "ansible" {
